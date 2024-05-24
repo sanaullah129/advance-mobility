@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(cors);
 
 pool.query("SELECT * FROM vehicles")
-    .then(([rows, fields]) => {
+    .then(([rows]) => {
         console.log(rows);
     })
     .catch(error => {
