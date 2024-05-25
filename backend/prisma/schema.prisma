@@ -1,0 +1,31 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Drivers {
+  DriverId          BigInt  @id @default(autoincrement())
+  name              String
+  phoneNumber       String
+  profilePhoto      String?
+}
+
+model Vehicles {
+  VehicleId               BigInt  @id @default(autoincrement())
+  vehicleNumber           String
+  vehicleType             String
+  pucCertificate          String?
+  insuranceCertificate    String?
+}
+
+model Transfer {
+  TransferId            Int       @id @default(autoincrement())
+  VehicleNumber         String
+  FromDriver            String
+  ToDriver              String
+  TransferDate          DateTime  @default(now())
+}
