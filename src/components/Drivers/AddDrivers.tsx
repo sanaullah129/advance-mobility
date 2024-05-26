@@ -6,17 +6,15 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../../utils/FirebaseConfig";
 import { AddDriver } from "../../apis/DriverApis";
 
-interface AddModalProps {
+interface AddDriversProps {
   open: boolean;
   close: () => void;
 }
 
-const AddModal: FC<AddModalProps> = ({ open, close }) => {
+const AddDrivers: FC<AddDriversProps> = ({ open, close }) => {
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [imageUpload, setImageUpload] = useState<File | null>(null);
-  const [imageURL, setImageURL] = useState<string>("");
-
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
@@ -37,7 +35,6 @@ const AddModal: FC<AddModalProps> = ({ open, close }) => {
   const resetFields = () => {
     setName("");
     setPhone("");
-    setImageURL("");
     setImageUpload(null);
   };
 
@@ -50,12 +47,10 @@ const AddModal: FC<AddModalProps> = ({ open, close }) => {
       const imageRef = ref(storage, `driverPhoto/${fileName}`);
       await uploadBytes(imageRef, imageUpload);
       const downloadURL = await getDownloadURL(imageRef);
-      setImageURL(downloadURL);
       return downloadURL;
     } catch (error) {
       console.log("Error uploading file: " + error);
       toast.error("Error uploading file");
-      return "";
     }
   };
 
@@ -63,9 +58,7 @@ const AddModal: FC<AddModalProps> = ({ open, close }) => {
     if (!name || !phone || !imageUpload)
       return toast.error("Please fill all the details");
 
-    const url = await uploadImage();
-    if (!url) return;
-    console.log(name, phone, url);
+    const url: any = await uploadImage();
     const success: boolean = await AddDriver(name, phone, url);
     if (success) {
       toast.success("Driver Added Successfully");
@@ -130,4 +123,4 @@ const AddModal: FC<AddModalProps> = ({ open, close }) => {
   );
 };
 
-export default AddModal;
+export default AddDrivers;

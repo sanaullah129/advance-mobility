@@ -4,3 +4,11 @@ export interface DriverInterface{
     phoneNumber: number;
     profilePhoto: string;
 }
+
+export interface VehicleInterface{
+    VehicleId: number;
+    vehicleNumber: string;
+    vehicleType: string;
+    pucCertificate: string;
+    insuranceCertificate: string;
+}

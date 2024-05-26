@@ -8,24 +8,25 @@ generator client {
 }
 
 model Drivers {
-  DriverId          BigInt  @id @default(autoincrement())
-  name              String
-  phoneNumber       String
-  profilePhoto      String?
+  DriverId     BigInt     @id @default(autoincrement())
+  name         String
+  phoneNumber  String
+  profilePhoto String?
 }
 
 model Vehicles {
-  VehicleId               BigInt  @id @default(autoincrement())
+  VehicleId               BigInt    @id @default(autoincrement())
   vehicleNumber           String
   vehicleType             String
-  pucCertificate          String?
-  insuranceCertificate    String?
+  pucCertificate          String?   @db.VarChar(2000)
+  insuranceCertificate    String?   @db.VarChar(200)
+  driverId                BigInt?
 }
 
-model Transfer {
-  TransferId            Int       @id @default(autoincrement())
-  VehicleNumber         String
-  FromDriver            String
-  ToDriver              String
-  TransferDate          DateTime  @default(now())
+model Transfers {
+  TransferId     Int       @id @default(autoincrement())
+  VehicleNumber  String
+  FromDriver     String
+  ToDriver       String
+  TransferDate   DateTime  @default(now())
 }

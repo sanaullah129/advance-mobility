@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { fetchAllDrivers, fetchDriverById } from "../../apis/DriverApis";
+import {
+  DeleteDriver,
+  fetchAllDrivers,
+  fetchDriverById,
+} from "../../apis/DriverApis";
 import { DriverInterface } from "../../utils/Interfaces";
 import { Button, Table, TableColumnsType } from "antd";
-import { EditTwoTone } from "@ant-design/icons";
-import EditModal from "./EditModal";
-import AddModal from "./AddModal";
+import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
+import EditDrivers from "./EditDrivers";
+import AddDrivers from "./AddDrivers";
+import toast from "react-hot-toast";
 
 const Drivers = () => {
   const [drivers, setDrivers] = useState<DriverInterface[]>([]);
@@ -21,7 +26,7 @@ const Drivers = () => {
 
   useEffect(() => {
     fetchDrivers();
-  }, []);
+  }, [drivers]);
 
   const handleEditDriver = async (driverId: number) => {
     const driverDetails: any = await fetchDriverById(driverId); //temp solution any
@@ -29,9 +34,17 @@ const Drivers = () => {
     setIsModalOpen(true);
   };
 
+  const handleDeleteDriver = async (id: number) => {
+    const isDeleted: boolean = await DeleteDriver(id);
+    if (isDeleted) {
+      toast.success("Driver Deleted Successfully");
+      fetchAllDrivers();
+    } else toast.error("Some error occured");
+  };
+
   const handleOpenAddModal = () => {
     setOpenAddModal(true);
-  }
+  };
 
   const columns: TableColumnsType<DriverInterface> = [
     {
@@ -48,16 +61,24 @@ const Drivers = () => {
       title: "Profile Photo",
       dataIndex: "profilePhoto",
       key: "profilePhoto",
-      render: (text: string) => <img src={text} alt="Profile Photo" className="h-[70px] w-[60px]" />,
+      render: (text: string) => (
+        <img src={text} alt="Profile Photo" className="h-[70px] w-[60px]" />
+      ),
     },
     {
       title: "Edit Details",
       key: "editDriver",
+      width: "12%",
       render: (driver: DriverInterface) => {
         return (
-          <Button onClick={() => handleEditDriver(driver.DriverId)}>
-            <EditTwoTone />
-          </Button>
+          <div className="flex justify-around">
+            <Button onClick={() => handleEditDriver(driver.DriverId)}>
+              <EditTwoTone />
+            </Button>
+            <Button onClick={() => handleDeleteDriver(driver.DriverId)}>
+              <DeleteTwoTone />
+            </Button>
+          </div>
         );
       },
     },
@@ -75,22 +96,26 @@ const Drivers = () => {
       <div className="flex justify-between mx-8 px-4 my-8">
         <div>Manage Drivers</div>
         <div>
-            <Button type="primary" onClick={handleOpenAddModal}>Add Driver</Button>
+          <Button type="primary" onClick={handleOpenAddModal}>
+            Add Driver
+          </Button>
         </div>
       </div>
-      <Table
-        columns={columns}
-        dataSource={rows}
-        rowKey="DriverId"
-        pagination={{ pageSize: 50 }}
-        scroll={{ x: true, y: 500 }}
-      />
-      <EditModal
+      <div className="px-8 my-3">
+        <Table
+          columns={columns}
+          dataSource={rows}
+          rowKey="DriverId"
+          pagination={{ pageSize: 50 }}
+          scroll={{ x: true, y: 500 }}
+        />
+      </div>
+      <EditDrivers
         data={singleDriver}
         open={isModalOpen}
         close={() => setIsModalOpen(false)}
       />
-      <AddModal open={openAddModal} close={()=> setOpenAddModal(false)}  />
+      <AddDrivers open={openAddModal} close={() => setOpenAddModal(false)} />
     </>
   );
 };
