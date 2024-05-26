@@ -7,30 +7,19 @@ const prisma = new PrismaClient();
 // /api/transfer
 export const transferVehicle = async (req: Request, res: Response) => {
     try {
-        const { vehicleNumber, fromDriver, toDriver } = req.body;
+        const { VehicleNumber, FromDriver, ToDriver } = req.body;
 
-        if (!vehicleNumber || !fromDriver || !toDriver) {
+        if (!VehicleNumber || !FromDriver || !ToDriver) {
             return res.status(400).json({ message: "Please provide all required details" });
         }
 
         const transfer = await prisma.transfers.create({
             data: {
-                VehicleNumber: vehicleNumber,
-                FromDriver: fromDriver,
-                ToDriver: toDriver,
+                VehicleNumber: VehicleNumber,
+                FromDriver: FromDriver,
+                ToDriver: ToDriver,
             },
         });
-
-        const vehicle = await prisma.vehicles.findFirst({
-            where: { vehicleNumber: vehicleNumber },
-        });
-
-        if (vehicle) {
-            await prisma.vehicles.update({
-                where: { VehicleId: vehicle.VehicleId },
-                data: { driverId: (await prisma.drivers.findFirst({ where: { name: toDriver } }))?.DriverId },
-            });
-        }
 
         res.status(201).json({ status: "Vehicle transferred successfully", transfer });
     } catch (error: any) {

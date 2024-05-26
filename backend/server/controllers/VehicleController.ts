@@ -29,10 +29,12 @@ export const AddVehicle = async (req: Request, res: Response) => {
 export const getAllVehicles = async (req: Request, res: Response) => {
   try {
     const fetchvehicles = await prisma.vehicles.findMany();
-    const vehicles = fetchvehicles.map(vehicle => ({
-      ...vehicle,
-      VehicleId: vehicle.VehicleId.toString(),
+
+    const vehicles = fetchvehicles.map(fetchvehicle => ({
+      ...fetchvehicle,
+      VehicleId: fetchvehicle.VehicleId.toString(),
     }));
+
     res.status(200).json(vehicles);
   } catch (error: any) {
     console.log("GetAllVehicles Error: ", error.message);

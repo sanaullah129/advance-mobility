@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, Input, Button, Select } from 'antd';
-import axios from 'axios';
+import React, { FC, useState, useEffect } from 'react';
+import { Modal, Select, Button } from 'antd';
 import toast from 'react-hot-toast';
+import { fetchAllDrivers } from '../../apis/DriverApi';
+import { fetchAllVehicles } from '../../apis/VehiclesApi';
+import { transferVehicle } from '../../apis/TransferApi';
 
 const { Option } = Select;
 
@@ -10,7 +12,7 @@ interface TransferFormProps {
     close: () => void;
 }
 
-const TransferForm: React.FC<TransferFormProps> = ({ open, close }) => {
+const TransferForm: FC<TransferFormProps> = ({ open, close }) => {
     const [vehicleNumber, setVehicleNumber] = useState<string>('');
     const [fromDriver, setFromDriver] = useState<string>('');
     const [toDriver, setToDriver] = useState<string>('');
@@ -21,12 +23,12 @@ const TransferForm: React.FC<TransferFormProps> = ({ open, close }) => {
         const fetchDriversAndVehicles = async () => {
             try {
                 const [driversRes, vehiclesRes] = await Promise.all([
-                    axios.get('/api/drivers'),
-                    axios.get('/api/vehicles')
+                    fetchAllDrivers(),
+                    fetchAllVehicles()
                 ]);
 
-                setDrivers(driversRes.data);
-                setVehicles(vehiclesRes.data);
+                setDrivers(driversRes);
+                setVehicles(vehiclesRes);
             } catch (error) {
                 toast.error("Error fetching drivers or vehicles");
             }
@@ -37,13 +39,8 @@ const TransferForm: React.FC<TransferFormProps> = ({ open, close }) => {
 
     const handleTransfer = async () => {
         try {
-            const response = await axios.post('/api/transfer', {
-                vehicleNumber,
-                fromDriver,
-                toDriver,
-            });
-
-            if (response.status === 201) {
+            const success = await transferVehicle(vehicleNumber, fromDriver, toDriver);
+            if (success) {
                 toast.success("Vehicle transferred successfully");
                 close();
             } else {

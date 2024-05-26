@@ -4,7 +4,6 @@ import { UploadOutlined } from "@ant-design/icons";
 import toast from "react-hot-toast";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../../utils/FirebaseConfig";
-import { AddDriver } from "../../apis/DriverApis";
 import { AddVehicle } from "../../apis/VehiclesApi";
 
 interface AddVehiclesProps {

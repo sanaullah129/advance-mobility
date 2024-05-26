@@ -3,6 +3,7 @@ import App from "./App";
 import Drivers from "./components/Drivers/Drivers";
 import Home from "./components/Home";
 import Vehicles from "./components/Vehicles/Vehicles";
+import TransferHistory from "./components/Tranfer/TransferHistory";
 
 const Routes = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const Routes = createBrowserRouter([
       {
         path: "vehicles",
         element: <Vehicles />,
+      },
+      {
+        path: "transfers",
+        element: <TransferHistory />,
       },
     ],
   },

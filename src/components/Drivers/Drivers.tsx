@@ -3,7 +3,7 @@ import {
   DeleteDriver,
   fetchAllDrivers,
   fetchDriverById,
-} from "../../apis/DriverApis";
+} from "../../apis/DriverApi";
 import { DriverInterface } from "../../utils/Interfaces";
 import { Button, Table, TableColumnsType } from "antd";
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";

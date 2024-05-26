@@ -5,7 +5,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import toast from "react-hot-toast";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../../utils/FirebaseConfig";
-import { UpdateDriver } from "../../apis/DriverApis";
+import { UpdateDriver } from "../../apis/DriverApi";
 
 interface EditDriversProps {
   data: DriverInterface | null;
@@ -35,7 +35,6 @@ const EditDrivers: FC<EditDriversProps> = ({ data, open, close }) => {
       ...prevValues,
       [name]: value,
     }));
-    console.log(formValues)
   };
 
   const handleImageChange = (info: any) => {
